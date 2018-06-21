@@ -144,5 +144,14 @@ extension DayHeaderView: PagingScrollViewDelegate {
     rightView.startDate = activeView.startDate.add(TimeChunk.dateComponents(weeks: 1))
 
     state?.client(client: self, didMoveTo: activeView.selectedDate!)
+    
+    guard let dayView = self.superview as? DayView, let pastBusinessDate = dayView.pastBusinessDate else {
+        return
+    }
+    if activeView.startDate.isEarlier(than: pastBusinessDate) {
+        pagingScrollView.canScrollBackward = false
+    } else {
+        pagingScrollView.canScrollBackward = true
+    }
   }
 }

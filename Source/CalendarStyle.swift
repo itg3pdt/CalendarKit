@@ -43,7 +43,8 @@ public class DaySelectorStyle: NSCopying {
   public var activeTextColor = UIColor.white
   public var selectedBackgroundColor = UIColor.black
 
-  public var weekendTextColor = UIColor.gray
+  public var sundayColor = UIColor.red
+  public var saturdayColor = UIColor.blue
   public var inactiveTextColor = UIColor.black
   public var inactiveBackgroundColor = UIColor.clear
 
@@ -59,7 +60,8 @@ public class DaySelectorStyle: NSCopying {
     let copy = DaySelectorStyle()
     copy.activeTextColor = activeTextColor
     copy.selectedBackgroundColor = selectedBackgroundColor
-    copy.weekendTextColor = weekendTextColor
+    copy.sundayColor = sundayColor
+    copy.saturdayColor = saturdayColor
     copy.inactiveTextColor = inactiveTextColor
     copy.inactiveBackgroundColor = inactiveBackgroundColor
     copy.todayInactiveTextColor = todayInactiveTextColor
@@ -71,13 +73,15 @@ public class DaySelectorStyle: NSCopying {
 }
 
 public class DaySymbolsStyle: NSCopying {
-  public var weekendColor = UIColor.lightGray
+  public var sundayColor = UIColor.red
+  public var saturdayColor = UIColor.blue
   public var weekDayColor = UIColor.black
   public var font = UIFont.systemFont(ofSize: 10)
   public init() {}
   public func copy(with zone: NSZone? = nil) -> Any {
     let copy = DaySymbolsStyle()
-    copy.weekendColor = weekendColor
+    copy.sundayColor = sundayColor
+    copy.saturdayColor = saturdayColor
     copy.weekDayColor = weekDayColor
     copy.font = font
     return copy

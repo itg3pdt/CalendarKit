@@ -1,5 +1,9 @@
 import UIKit
 
+enum DayOfTheWeek: Int {
+    case sunday, saturday, weekday
+}
+
 class DaySymbolsView: UIView {
 
   var daysInWeek = 7
@@ -39,16 +43,25 @@ class DaySymbolsView: UIView {
   }
 
   func configure() {
+    let formatter = DateFormatter()
+    formatter.locale = Locale(identifier: "ja_JP")
     let daySymbols = calendar.veryShortWeekdaySymbols
-    let weekendMask = [true] + [Bool](repeating: false, count: 5) + [true]
+    let weekendMask: [DayOfTheWeek] = [.sunday] + [DayOfTheWeek](repeating: .weekday, count: 5) + [.saturday]
     var weekDays = Array(zip(daySymbols, weekendMask))
 
     weekDays.shift(calendar.firstWeekday - 1)
 
     for (index, label) in labels.enumerated() {
-      label.text = weekDays[index].0
-      label.textColor = weekDays[index].1 ? style.weekendColor : style.weekDayColor
-      label.font = style.font
+        label.text = weekDays[index].0
+        switch weekDays[index].1 {
+        case .sunday:
+            label.textColor = style.sundayColor
+        case .saturday:
+            label.textColor = style.saturdayColor
+        case .weekday:
+            label.textColor = style.weekDayColor
+        }
+        label.font = style.font
     }
   }
 

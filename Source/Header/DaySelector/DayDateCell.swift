@@ -54,7 +54,7 @@ class DayDateCell: UIView, DaySelectorItemProtocol {
 
   func updateState() {
     dayLabel.font = UIFont.systemFont(ofSize: regularSizeClassFontSize)
-    dayLabel.textColor = date.isWeekend ? style.weekendTextColor : style.inactiveTextColor
+    dayLabel.textColor = date.dayColor(style: style)
     dateLabel.updateState()
     updateDayLabel()
     setNeedsLayout()

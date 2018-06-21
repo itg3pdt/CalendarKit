@@ -5,7 +5,9 @@ import DateToolsSwift
 public protocol DayViewDelegate: class {
   func dayViewDidSelectEventView(_ eventView: EventView)
   func dayViewDidLongPressEventView(_ eventView: EventView)
+  func dayViewDidPanEventView(_ eventView: EventView)
   func dayViewDidLongPressTimelineAtHour(_ hour: Int)
+  func dayViewDidTap(_ timelineView: TimelineView)
   func dayView(dayView: DayView, willMoveTo date: Date)
   func dayView(dayView: DayView, didMoveTo  date: Date)
 }
@@ -38,6 +40,8 @@ public class DayView: UIView {
 
   static let headerVisibleHeight: CGFloat = 88
   var headerHeight: CGFloat = headerVisibleHeight
+    
+  static let footerHeight: CGFloat = 35
 
   open var autoScrollToFirstEvent: Bool {
     get {
@@ -50,6 +54,7 @@ public class DayView: UIView {
 
   let dayHeaderView = DayHeaderView()
   let timelinePagerView = TimelinePagerView()
+  let footerView = FooterView()
 
   public var state: DayViewState? {
     didSet {
@@ -59,6 +64,10 @@ public class DayView: UIView {
   }
 
   var style = CalendarStyle()
+    
+  public var draggableEventView: EventView?
+    
+  public var pastBusinessDate: Date?
 
   public init(state: DayViewState) {
     super.init(frame: .zero)
@@ -79,6 +88,7 @@ public class DayView: UIView {
   func configure() {
     addSubview(timelinePagerView)
     addSubview(dayHeaderView)
+    addSubview(footerView)
     timelinePagerView.delegate = self
 
     if state == nil {
@@ -108,11 +118,15 @@ public class DayView: UIView {
     timelinePagerView.reloadData()
   }
 
+  public func updateAggregatedData(price: Int, count: Int) {
+    footerView.updateAggregatedData(price: price, count: count)
+  }
+
   override public func layoutSubviews() {
     super.layoutSubviews()
     dayHeaderView.anchorAndFillEdge(.top, xPad: 0, yPad: 0, otherSize: headerHeight)
-    timelinePagerView.alignAndFill(align: .underCentered, relativeTo: dayHeaderView, padding: 0)
-  }
+    footerView.anchorAndFillEdge(.bottom, xPad: 0, yPad: 0, otherSize: DayView.footerHeight)
+    timelinePagerView.alignBetweenVertical(align: .underCentered, primaryView: dayHeaderView, secondaryView: footerView, padding: 0, width: dayHeaderView.bounds.width)  }
 
   public func transitionToHorizontalSizeClass(_ sizeClass: UIUserInterfaceSizeClass) {
     dayHeaderView.transitionToHorizontalSizeClass(sizeClass)
@@ -127,6 +141,12 @@ extension DayView: EventViewDelegate {
   public func eventViewDidLongPress(_ eventview: EventView) {
     delegate?.dayViewDidLongPressEventView(eventview)
   }
+  public func eventView(_ eventView: EventView, didMoveTo translation: CGPoint) {
+    delegate?.dayViewDidPanEventView(eventView)
+  }
+  public func eventView(_ eventView: EventView, didExpandAndContractTo translation: CGPoint) {
+    delegate?.dayViewDidPanEventView(eventView)
+  }
 }
 
 extension DayView: TimelinePagerViewDelegate {
@@ -136,8 +156,14 @@ extension DayView: TimelinePagerViewDelegate {
   public func timelinePagerDidLongPressEventView(_ eventView: EventView) {
     delegate?.dayViewDidLongPressEventView(eventView)
   }
+  public func timelinePagerDidPanEventView(_ eventView: EventView) {
+    delegate?.dayViewDidPanEventView(eventView)
+  }
   public func timelinePagerDidLongPressTimelineAtHour(_ hour: Int) {
     delegate?.dayViewDidLongPressTimelineAtHour(hour)
+  }
+  public func timelinePagerDidTap(_ timelineView: TimelineView) {
+    delegate?.dayViewDidTap(timelineView)
   }
   public func timelinePager(timelinePager: TimelinePagerView, willMoveTo date: Date) {
     delegate?.dayView(dayView: self, willMoveTo: date)
@@ -150,6 +176,9 @@ extension DayView: TimelinePagerViewDelegate {
 extension DayView: TimelineViewDelegate {
   public func timelineView(_ timelineView: TimelineView, didLongPressAt hour: Int) {
     delegate?.dayViewDidLongPressTimelineAtHour(hour)
+  }
+  public func timelineViewDidTap(_ timelineView: TimelineView) {
+    delegate?.dayViewDidTap(timelineView)
   }
 }
 
