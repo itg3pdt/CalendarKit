@@ -373,3 +373,24 @@ public class TimelineView: UIView, ReusableView {
     }
   }
 }
+
+extension TimelineView {
+  
+  /// Timelineに対して影のレイヤーを追加する
+  ///
+  /// - Parameters:
+  ///   - startPoint: 追加する始点(0.0~24.0。少数点は分を示す)
+  ///   - shadowLength: レイヤーの長さ(0.0~24.0。小数点は分を示す)
+  public func addShadowLayer(startPoint: CGFloat, shadowLength: CGFloat) {
+    let shadowLayer = CALayer()
+    let shadowLayerWidth: CGFloat = 270.0
+    shadowLayer.frame = CGRect(x: leftInset,
+                               y: verticalInset + startPoint * verticalDiff,
+                               width: shadowLayerWidth,
+                               height: shadowLength * verticalDiff)
+    shadowLayer.backgroundColor = UIColor.lightGray.cgColor
+    shadowLayer.opacity = style.shadowLayerOpacity
+    self.layer.addSublayer(shadowLayer)
+  }
+    
+}

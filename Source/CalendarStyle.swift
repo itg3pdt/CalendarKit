@@ -103,6 +103,7 @@ public class TimelineStyle: NSCopying {
   public var backgroundColor = UIColor.white
   public var font = UIFont.boldSystemFont(ofSize: 11)
   public var dateStyle : DateStyle = .system
+  public var shadowLayerOpacity: Float = 0.7
   public init() {}
   public func copy(with zone: NSZone? = nil) -> Any {
     let copy = TimelineStyle()
@@ -112,6 +113,7 @@ public class TimelineStyle: NSCopying {
     copy.backgroundColor = backgroundColor
     copy.font = font
     copy.dateStyle = dateStyle
+    copy.shadowLayerOpacity = shadowLayerOpacity
     return copy
   }
 }

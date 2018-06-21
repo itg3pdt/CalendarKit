@@ -186,3 +186,18 @@ extension TimelinePagerView: EventViewDelegate {
     delegate?.timelinePagerDidLongPressEventView(eventview)
   }
 }
+
+extension TimelinePagerView {
+
+  /// Timelineに対して影のレイヤーを追加する
+  ///
+  /// - Parameters:
+  ///   - startPoint: 追加する始点(0.0~24.0。少数点は分を示す)
+  ///   - shadowLength: レイヤーの長さ(0.0~24.0。小数点は分を示す)
+  public func addShadowLayer(startPoint: CGFloat, shadowLength: CGFloat) {
+    timelinePager.reusableViews.forEach { timelineContainer in
+    timelineContainer.timeline.addShadowLayer(startPoint: startPoint, shadowLength: shadowLength)
+    }
+  }
+    
+}

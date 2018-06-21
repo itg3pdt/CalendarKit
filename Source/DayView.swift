@@ -152,3 +152,16 @@ extension DayView: TimelineViewDelegate {
     delegate?.dayViewDidLongPressTimelineAtHour(hour)
   }
 }
+
+extension DayView {
+    
+  /// Timelineに対して影のレイヤーを追加する
+  ///
+  /// - Parameters:
+  ///   - startPoint: 追加する始点(0.0~24.0。少数点は分を示す)
+  ///   - shadowLength: レイヤーの長さ(0.0~24.0。小数点は分を示す)
+  public func addShadowLayer(startPoint: CGFloat, shadowLength: CGFloat) {
+    timelinePagerView.addShadowLayer(startPoint: startPoint, shadowLength: shadowLength)
+  }
+    
+}
