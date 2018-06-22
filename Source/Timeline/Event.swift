@@ -17,6 +17,10 @@ open class Event: EventDescriptor {
   public var backgroundColor = UIColor.blue
   public var textColor = UIColor.white
   public var font = UIFont.boldSystemFont(ofSize: 12)
+  public var dateFormat = "HH:mm"
+  public var dateText: String {
+    return "\(startDate.format(with: dateFormat))-\(endDate.format(with: dateFormat))"
+  }
   public var userInfo: Any?
   public init() {}
 }

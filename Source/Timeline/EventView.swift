@@ -65,7 +65,7 @@ open class EventView: UIView {
     if let attributedText = event.attributedText {
       textView.attributedText = attributedText
     } else {
-      textView.text = event.text
+      textView.text = event.dateText + "\n" + event.text
       textView.textColor = event.textColor
       textView.font = event.font
     }
@@ -157,6 +157,7 @@ open class EventView: UIView {
   override open func layoutSubviews() {
     super.layoutSubviews()
     textView.fillSuperview()
+    layer.cornerRadius = 10
   }
     
   public func select() {
