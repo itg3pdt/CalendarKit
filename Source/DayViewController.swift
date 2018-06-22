@@ -38,6 +38,10 @@ open class DayViewController: UIViewController, EventDataSource, DayViewDelegate
   open func reloadData() {
     dayView.reloadData()
   }
+    
+  open func updateAggregatedData(price: Int, count: Int) {
+    dayView.updateAggregatedData(price: price, count: count)
+  }
 
   open func updateStyle(_ newStyle: CalendarStyle) {
     dayView.updateStyle(newStyle)
@@ -54,8 +58,14 @@ open class DayViewController: UIViewController, EventDataSource, DayViewDelegate
 
   open func dayViewDidLongPressEventView(_ eventView: EventView) {
   }
+    
+  open func dayViewDidPanEventView(_ eventView: EventView) {
+  }
 
   open func dayViewDidLongPressTimelineAtHour(_ hour: Int) {
+  }
+    
+  open func dayViewDidTap(_ timelineView: TimelineView) {
   }
 
   open func dayView(dayView: DayView, willMoveTo date: Date) {

@@ -6,6 +6,7 @@ public protocol TimelinePagerViewDelegate: class {
   func timelinePagerDidSelectEventView(_ eventView: EventView)
   func timelinePagerDidLongPressEventView(_ eventView: EventView)
   func timelinePagerDidLongPressTimelineAtHour(_ hour: Int)
+  func timelinePagerDidTap(_ timelineView: TimelineView)
   func timelinePager(timelinePager: TimelinePagerView, willMoveTo date: Date)
   func timelinePager(timelinePager: TimelinePagerView, didMoveTo  date: Date)
 }
@@ -162,6 +163,18 @@ extension TimelinePagerView: PagingScrollViewDelegate {
     rightView.date = state.selectedDate.add(TimeChunk.dateComponents(days: 1))
 
     [leftView, rightView].forEach{self.updateTimeline($0)}
+    
+    guard let dayView = self.delegate as? DayView, let pastBusinessDate = dayView.pastBusinessDate else {
+        return
+    }
+
+    if state.selectedDate.isSameDay(date: pastBusinessDate) {
+        timelinePager.canScrollBackward = false
+    } else {
+        timelinePager.canScrollBackward = true
+    }
+    
+    delegate?.timelinePagerDidTap(timelinePager.reusableViews[index].timeline)
   }
 
   func scrollToFirstEventIfNeeded() {
@@ -176,6 +189,9 @@ extension TimelinePagerView: TimelineViewDelegate {
   public func timelineView(_ timelineView: TimelineView, didLongPressAt hour: Int) {
     delegate?.timelinePagerDidLongPressTimelineAtHour(hour)
   }
+  public func timelineViewDidTap(_ timelineView: TimelineView) {
+    delegate?.timelinePagerDidTap(timelineView)
+  }
 }
 
 extension TimelinePagerView: EventViewDelegate {
@@ -185,4 +201,25 @@ extension TimelinePagerView: EventViewDelegate {
   public func eventViewDidLongPress(_ eventview: EventView) {
     delegate?.timelinePagerDidLongPressEventView(eventview)
   }
+  public func eventView(_ eventView: EventView, didMoveTo translation: CGPoint) {
+    
+  }
+  public func eventView(_ eventView: EventView, didExpandAndContractTo translation: CGPoint) {
+    
+  }
+}
+
+extension TimelinePagerView {
+
+  /// Timelineに対して影のレイヤーを追加する
+  ///
+  /// - Parameters:
+  ///   - startPoint: 追加する始点(0.0~24.0。少数点は分を示す)
+  ///   - shadowLength: レイヤーの長さ(0.0~24.0。小数点は分を示す)
+  public func addShadowLayer(startPoint: CGFloat, shadowLength: CGFloat) {
+    timelinePager.reusableViews.forEach { timelineContainer in
+    timelineContainer.timeline.addShadowLayer(startPoint: startPoint, shadowLength: shadowLength)
+    }
+  }
+    
 }

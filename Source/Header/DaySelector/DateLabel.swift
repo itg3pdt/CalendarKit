@@ -1,6 +1,19 @@
 import UIKit
 import DateToolsSwift
 
+extension Date {
+    func dayColor(style: DaySelectorStyle) -> UIColor {
+        switch self.component(.weekday) {
+        case 1:
+            return style.sundayColor
+        case 7:
+            return style.saturdayColor
+        default:
+            return style.inactiveTextColor
+        }
+    }
+}
+
 class DateLabel: UILabel, DaySelectorItemProtocol {
   
   var date = Date() {
@@ -50,7 +63,7 @@ class DateLabel: UILabel, DaySelectorItemProtocol {
       textColor = style.activeTextColor
       backgroundColor = today ? style.todayActiveBackgroundColor : style.selectedBackgroundColor
     } else {
-      let notTodayColor = date.isWeekend ? style.weekendTextColor : style.inactiveTextColor
+      let notTodayColor = date.dayColor(style: style)
       font = style.font
       textColor = today ? style.todayInactiveTextColor : notTodayColor
       backgroundColor = style.inactiveBackgroundColor

@@ -14,8 +14,8 @@ open class Event: EventDescriptor {
       textColor = UIColor(hue: h, saturation: s, brightness: b * 0.4, alpha: a)
     }
   }
-  public var backgroundColor = UIColor.blue.withAlphaComponent(0.3)
-  public var textColor = UIColor.black
+  public var backgroundColor = UIColor.blue
+  public var textColor = UIColor.white
   public var font = UIFont.boldSystemFont(ofSize: 12)
   public var userInfo: Any?
   public init() {}

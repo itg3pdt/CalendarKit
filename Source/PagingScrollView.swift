@@ -30,6 +30,8 @@ class PagingScrollView<T: UIView>: UIScrollView, UIScrollViewDelegate where T: R
     return round(currentScrollViewPage) + accumulator
   }
 
+  var canScrollBackward: Bool = true
+    
   override init(frame: CGRect) {
     super.init(frame: frame)
     configure()
@@ -117,4 +119,14 @@ class PagingScrollView<T: UIView>: UIScrollView, UIScrollViewDelegate where T: R
   func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
     checkForPageChange()
   }
+    
+  func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    guard !canScrollBackward else {
+      return
+    }
+    // 過去方向にスクロールさせない
+    let offsetX = contentOffset.x < bounds.size.width ? bounds.size.width : contentOffset.x
+    contentOffset = CGPoint(x: offsetX, y: contentOffset.y)
+  }
+    
 }
