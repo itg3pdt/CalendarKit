@@ -30,6 +30,12 @@ public class TimelineView: UIView, ReusableView {
   public private(set) var regularLayoutAttributes = [EventLayoutAttributes]()
   public private(set) var allDayLayoutAttributes = [EventLayoutAttributes]()
   
+  /// shadowLayerのz軸(EventViewを手前に表示するために-1.0を指定)
+  private let shadowLayerZPosition: CGFloat = -1.0
+  
+  /// shadowLayerの幅
+  private let shadowLayerWidth: CGFloat = 270.0
+
   public var layoutAttributes: [EventLayoutAttributes] {
     set {
       
@@ -383,13 +389,13 @@ extension TimelineView {
   ///   - shadowLength: レイヤーの長さ(0.0~24.0。小数点は分を示す)
   public func addShadowLayer(startPoint: CGFloat, shadowLength: CGFloat) {
     let shadowLayer = CALayer()
-    let shadowLayerWidth: CGFloat = 270.0
     shadowLayer.frame = CGRect(x: leftInset,
                                y: verticalInset + startPoint * verticalDiff,
                                width: shadowLayerWidth,
                                height: shadowLength * verticalDiff)
     shadowLayer.backgroundColor = UIColor.lightGray.cgColor
     shadowLayer.opacity = style.shadowLayerOpacity
+    shadowLayer.zPosition = shadowLayerZPosition
     self.layer.addSublayer(shadowLayer)
   }
     
