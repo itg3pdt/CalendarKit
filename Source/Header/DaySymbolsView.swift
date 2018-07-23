@@ -1,4 +1,5 @@
 import UIKit
+import DateToolsSwift
 
 enum DayOfTheWeek: Int {
     case sunday, saturday, weekday
@@ -11,6 +12,8 @@ class DaySymbolsView: UIView {
   var labels = [UILabel]()
   var style: DaySymbolsStyle = DaySymbolsStyle()
 
+  var startDate: Date?
+    
   override init(frame: CGRect) {
     super.init(frame: frame)
     initializeViews()
@@ -40,6 +43,7 @@ class DaySymbolsView: UIView {
   func updateStyle(_ newStyle: DaySymbolsStyle) {
     style = newStyle.copy() as! DaySymbolsStyle
     configure()
+    setHolidayColor()
   }
 
   func configure() {
@@ -80,3 +84,20 @@ class DaySymbolsView: UIView {
     }
   }
 }
+
+extension DaySymbolsView {
+
+  /// 現在のSymbolのうち祝日に該当するSymbolの文字色をholidayColorに変更する
+  func setHolidayColor() {
+    guard startDate != nil else {
+        return
+    }
+    for (index, label) in labels.enumerated() {
+      let targetDate = startDate.add(TimeChunk.dateComponents(days: index))
+      if targetDate.isJapaneseHoliday() {
+        label.textColor = style.holidayColor
+      }
+    }
+  }
+}
+
