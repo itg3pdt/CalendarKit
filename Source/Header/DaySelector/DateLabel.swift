@@ -65,7 +65,15 @@ class DateLabel: UILabel, DaySelectorItemProtocol {
     } else {
       let notTodayColor = date.dayColor(style: style)
       font = style.font
-      textColor = today ? style.todayInactiveTextColor : notTodayColor
+      
+      if today {
+        textColor = style.todayInactiveTextColor
+      } else if date.isJapaneseHoliday() {
+        textColor = style.holidayColor
+      } else {
+        textColor = notTodayColor
+      }
+        
       backgroundColor = style.inactiveBackgroundColor
     }
   }

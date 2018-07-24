@@ -58,6 +58,7 @@ public class DayHeaderView: UIView {
       pagingScrollView.addSubview(daySelector)
       daySelector.delegate = self
     }
+    daySymbolsView.startDate = beginningOfWeek(selectedDate)
     let centerDaySelector = pagingScrollView.reusableViews[1]
     centerDaySelector.selectedDate = selectedDate
     currentWeekdayIndex = centerDaySelector.selectedIndex
@@ -142,6 +143,9 @@ extension DayHeaderView: PagingScrollViewDelegate {
 
     leftView.startDate = activeView.startDate.add(TimeChunk.dateComponents(weeks: -1))
     rightView.startDate = activeView.startDate.add(TimeChunk.dateComponents(weeks: 1))
+    
+    daySymbolsView.startDate = activeView.startDate
+    daySymbolsView.updateStyle(style.daySymbols)
 
     state?.client(client: self, didMoveTo: activeView.selectedDate!)
     
