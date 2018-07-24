@@ -14,23 +14,15 @@ extension Date {
     ///
     /// - Returns: 日本の祝日かどうか
     func isJapaneseHoliday() -> Bool {
-        let dateSlashFormatter: DateFormatter = {
-            let dateFormatter = DateFormatter()
-            dateFormatter.timeZone = Calendar.current.timeZone
-            dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-            dateFormatter.dateFormat = "yyyy/MM/dd"
-            return dateFormatter
-        }()
-            
-        let calendarLogicHoliday = CalculateCalendarLogic()
-        let tmp = dateSlashFormatter.string(from: self)
-        let dateArray = tmp.split(separator: "/")
-        guard let yyyy = Int(dateArray[0]),
-                let mm = Int(dateArray[1]),
-                let dd = Int(dateArray[2]) else {
-                return false
-        }
         
-        return calendarLogicHoliday.judgeJapaneseHoliday(year: yyyy, month: mm, day: dd)
+        let calendar = Calendar.init(identifier: .gregorian)
+        
+        let year = calendar.component(.year, from: self)
+        let month = calendar.component(.month, from: self)
+        let day = calendar.component(.day, from: self)
+        
+        let calendarLogicHoliday = CalculateCalendarLogic()
+        
+        return calendarLogicHoliday.judgeJapaneseHoliday(year: year, month: month, day: day)
     }
 }
